@@ -22,7 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CT_Analysis.py" />
+    <Compile Include="CT_Analysis_v02.py" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="..\..\..\Tensorflow\Tensorflow\env\">
