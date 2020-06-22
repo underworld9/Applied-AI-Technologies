@@ -72,18 +72,9 @@ def process_path(file_path):
 # Set `num_parallel_calls` so multiple images are loaded/processed in parallel.
 labeled_ds = list_ds.map(process_path, num_parallel_calls=AUTOTUNE)
 
-def prepare_for_testing(ds, cache=True):
-  # This is a small dataset, only load it once, and keep it in memory.
-  # use `.cache(filename)` to cache preprocessing work for datasets that don't
-  # fit in memory.
-  if cache:
-    if isinstance(cache, str):
-      ds = ds.cache(cache)
-    else:
-      ds = ds.cache('tmp/cache')
+def prepare_for_testing(ds):
 
   ds = ds.batch(BATCH_SIZE)
-
 
   # `prefetch` lets the dataset fetch batches in the background while the model
   # is training.
@@ -157,3 +148,60 @@ def plot_confusion_matrix(cm, class_names):
   return figure
 
 plot_confusion_matrix(cm, CLASS_NAMES)
+
+def plot_image(i, predictions_array, true_label, img):
+  predictions_array, true_label, img = predictions_array, true_label[i], img[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+
+  plt.imshow(img, cmap=plt.cm.binary)
+
+  predicted_label = np.argmax(predictions_array)
+  if predicted_label == true_label:
+    color = 'blue'
+  else:
+    color = 'red'
+
+  plt.xlabel("{} {:2.0f}% ({})".format(CLASS_NAMES[predicted_label],
+                                100*np.max(predictions_array),
+                                CLASS_NAMES[true_label]),
+                                color=color)
+
+def plot_value_array(i, predictions_array, true_label):
+  predictions_array, true_label = predictions_array, true_label[i]
+  plt.grid(False)
+  plt.xticks(range(2))
+  plt.yticks([])
+  thisplot = plt.bar(range(2), predictions_array, color="#777777")
+  plt.ylim([0, 1])
+  predicted_label = np.argmax(predictions_array)
+
+  thisplot[predicted_label].set_color('red')
+  thisplot[true_label].set_color('blue')
+
+
+i = 0
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions[i], y_true, image_batch)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions[i],  y_true)
+plt.show()
+
+
+"""
+
+
+num_rows = 5
+num_cols = 3
+num_images = num_rows*num_cols
+plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+for i in range(num_images):
+  plt.subplot(num_rows, 2*num_cols, 2*i+1)
+  plot_image(i, predictions[i], y_true, image_batch)
+  plt.subplot(num_rows, 2*num_cols, 2*i+2)
+  plot_value_array(i, predictions[i], y_true)
+plt.tight_layout()
+plt.show()
+"""
