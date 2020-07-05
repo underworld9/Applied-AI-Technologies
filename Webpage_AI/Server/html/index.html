@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" ng-app="DataManagerApp">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <ng-include src="'/html/header.html'"></ng-include>
+  <script src="/js/data.js"></script>
+  <!-- Begin page content -->
+  <main role="main" class="flex-shrink-0" style="margin-top: 60px;">
+    <div class="container">
+      <div class="col-10 mx-auto">
+        <div class="text-center">
+          <h1>Welcome to the Corona Detection Site!</h1>
+          <p>
+            This detection is created by a couple of students of the University
+            of Applied Sciences in Esslingen.
+          </p>
+          <p>
+            You can upload a picture of the CT-Scan and you'll get a answer
+            guessed by a Machine Learning Algorithm
+          </p>
+          <h2>Prerequisites</h2>
+          <ul>
+            <li>The pictures size must be less than...</li>
+            <li>Following picture formats can be used: PNG, JPEG</li>
+          </ul>
+        </div>
+        <div class="text-center" style="margin-top: 50px;">
+          <h1>Insert a Picture in the Following Box</h1>
+          <p>
+            The picture will be uploaded to our Server and will be evaluated...
+          </p>
+          <form onsubmit="uploadImage(event)">
+            <input type="file" accept="image/*" name="photo" id="fileid" />
+            <input type="submit" value="upload" />
+          </form>
+          <div style="padding-top: 30px"></div>
+          <img id="bild" src="">
+          <div style="padding-top: 30px"></div>
+          <input id="analyze" type="button" value="Analyze" style="display: none"
+                 onclick="analyzeImage()"
+          />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer mt-auto py-3">
+    <div class="container">
+      <span class="text-muted"
+        >Copyright Team-F Course: Applied AI - University of Applied Sciences
+        Esslingen</span
+      >
+    </div>
+  </footer>
+</html>

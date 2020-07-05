@@ -189,5 +189,3 @@ plt.show()
 
 
 #model.save("saved_model_ct/model_v07")
-
-

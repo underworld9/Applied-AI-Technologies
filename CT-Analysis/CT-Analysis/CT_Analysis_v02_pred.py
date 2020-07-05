@@ -23,7 +23,7 @@ from sklearn.metrics import plot_confusion_matrix
 import warnings
 warnings.filterwarnings("ignore")
 
-PATH = 'C:\\ct_scan'
+PATH = '/home/stefan/Studium/AI/CT_Scans/ct_scan'
 
 test_dir = os.path.join(PATH, 'test')
 
@@ -190,8 +190,6 @@ plot_value_array(i, predictions[i],  y_true)
 plt.show()
 
 
-"""
-
 
 num_rows = 5
 num_cols = 3
@@ -204,4 +202,3 @@ for i in range(num_images):
   plot_value_array(i, predictions[i], y_true)
 plt.tight_layout()
 plt.show()
-"""

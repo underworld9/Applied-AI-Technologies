@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+Webpage_AI/Server/venv/
+/venv/
+/Webpage_AI/Server/venv/
