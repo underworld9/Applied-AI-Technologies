@@ -10,6 +10,9 @@ import pandas as pd
 import numpy as np
 import sklearn
 import itertools
+import tensorflow.keras.backend as K
+import cv2
+
 
 
 from PIL import Image
@@ -202,3 +205,67 @@ for i in range(num_images):
   plot_value_array(i, predictions[i], y_true)
 plt.tight_layout()
 plt.show()
+
+def plotheatmap(convlayer):
+    n = 1
+
+    img = image_batch[n]
+
+    x = tf.expand_dims(img, 0)
+
+    def getsinglepred(predictions):
+        #gibt die stelle des maxwertes in predictions in einem array zurück.
+        pred = []
+        for i in range(1):
+            pred.append(np.argmax(predictions[i]))
+            print(CLASS_NAMES[pred])
+
+        return pred
+
+    preds = probability_model.predict(x)
+
+    print(getsinglepred(preds))
+
+    #model.summary()
+
+    if getsinglepred(preds) == [0] or getsinglepred(preds) == [1]:
+
+        with tf.GradientTape() as tape:
+            last_conv_layer = model.get_layer(convlayer)
+            #print("last_conv_layer",last_conv_layer)
+            iterate = tf.keras.models.Model([model.inputs], [model.output, last_conv_layer.output])
+            #print("iterate",iterate)
+            model_out, last_conv_layer = iterate(x)
+            #print("model_out",model_out)
+            class_out = model_out[:, np.argmax(model_out[0])]
+            #print("class_out",class_out)
+            grads = tape.gradient(class_out, last_conv_layer)
+            #print("grads",grads)
+            pooled_grads = K.mean(grads, axis=(0, 1, 2))
+            #print("pooled_grads",pooled_grads)
+  
+        heatmap = tf.reduce_mean(tf.multiply(pooled_grads, last_conv_layer), axis=-1)
+
+        heatmap = np.maximum(heatmap, 0)
+        heatmap /= np.max(heatmap)
+        heatmap = heatmap.reshape((9, 9))
+        plt.matshow(heatmap)
+        plt.show()
+
+        INTENSITY = 0.5
+
+        heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))
+
+        heatmap = cv2.applyColorMap(np.uint8(255*heatmap), cv2.COLORMAP_JET)
+
+        heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
+
+        img = heatmap * INTENSITY + img
+
+        plt.matshow(img)
+        plt.show()
+    else:
+        plt.matshow(img)
+        plt.show()
+
+plotheatmap("conv2d_6")
