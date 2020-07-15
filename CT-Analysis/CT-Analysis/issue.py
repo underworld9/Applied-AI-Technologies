@@ -117,7 +117,7 @@ def getypred(predictions):
 y_true = getytrue(label_batch)
 y_pred = getypred(predictions)
 
-def plotheatmap(convlayer):
+def plotheatmap():
     n = 1
 
     img = image_batch[n]
@@ -142,7 +142,7 @@ def plotheatmap(convlayer):
     if getsinglepred(preds) == [0] or getsinglepred(preds) == [1]:
 
         with tf.GradientTape() as tape:
-            last_conv_layer = model.get_layer("vgg16").get_layer(convlayer)
+            last_conv_layer = model.get_layer("vgg16").get_layer("block5_conv3")
             iterate = tf.keras.models.Model([model.inputs], [model.output, last_conv_layer.output])
             model_out, last_conv_layer = iterate(x)
             class_out = model_out[:, np.argmax(model_out[0])]
@@ -173,4 +173,4 @@ def plotheatmap(convlayer):
         plt.matshow(img)
         plt.show()
 
-plotheatmap("block5_conv3")
+plotheatmap()
