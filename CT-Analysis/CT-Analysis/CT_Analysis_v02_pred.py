@@ -206,7 +206,7 @@ for i in range(num_images):
 plt.tight_layout()
 plt.show()
 
-def plotheatmap(convlayer):
+def plotheatmap():
     n = 1
 
     img = image_batch[n]
@@ -228,27 +228,21 @@ def plotheatmap(convlayer):
 
     #model.summary()
 
-    if getsinglepred(preds) == [0] or getsinglepred(preds) == [1]:
+    if getsinglepred(preds) == [0]:
 
         with tf.GradientTape() as tape:
-            last_conv_layer = model.get_layer(convlayer)
-            #print("last_conv_layer",last_conv_layer)
+            last_conv_layer = model.get_layer("block5_conv3")
             iterate = tf.keras.models.Model([model.inputs], [model.output, last_conv_layer.output])
-            #print("iterate",iterate)
             model_out, last_conv_layer = iterate(x)
-            #print("model_out",model_out)
             class_out = model_out[:, np.argmax(model_out[0])]
-            #print("class_out",class_out)
             grads = tape.gradient(class_out, last_conv_layer)
-            #print("grads",grads)
             pooled_grads = K.mean(grads, axis=(0, 1, 2))
-            #print("pooled_grads",pooled_grads)
   
         heatmap = tf.reduce_mean(tf.multiply(pooled_grads, last_conv_layer), axis=-1)
 
         heatmap = np.maximum(heatmap, 0)
         heatmap /= np.max(heatmap)
-        heatmap = heatmap.reshape((9, 9))
+        heatmap = heatmap.reshape((14, 14))
         plt.matshow(heatmap)
         plt.show()
 
@@ -268,4 +262,4 @@ def plotheatmap(convlayer):
         plt.matshow(img)
         plt.show()
 
-plotheatmap("conv2d_6")
+plotheatmap()
