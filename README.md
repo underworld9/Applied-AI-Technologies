@@ -1,4 +1,7 @@
 # Applied-AI-Technologies
+HTTPS://WWW.HACKSTER.IO/SCHEI890/COVID-19-CT-SCAN-APPLIEDAI2020-07760E
+
+
 
 Repo for the lecture "Applied Artificial Intelligence" at the University of Applied Sciences Esslingen created by [Dionysios Satikidis](mailto:dionysios.satikidis@gmail.com) and [Jan Seyler](mailto:Jan.Seyler@gmail.com).
 
